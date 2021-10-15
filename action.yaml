@@ -1,0 +1,33 @@
+name: 'npm-audit-fix'
+description: 'Try to fix npm vulnerabilities and report if it cannot'
+
+inputs:
+  working-dir:
+    description: 'the project working directory'
+    required: true
+  github-user:
+    description: 'user of github'
+    required: true
+    default: 'github-action-committer'
+  github-email:
+    description: 'email of the github user'
+    require: true
+  github-remote:
+    description: 'the git remote name'
+    require: false
+    default: 'origin'
+  github-token:
+    description: 'github token for action operation'
+    require: true
+
+outputs:
+  is_updated:
+    description: 'informs if the update was done successfully or not'
+
+runs:
+  using: node12
+  main: dist/index.js
+
+branding:
+  color: 'blue'
+  icon: 'archive'
