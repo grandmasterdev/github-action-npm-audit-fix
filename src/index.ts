@@ -80,7 +80,7 @@ const makePullRequest = async () => {
 
   console.info(`making pull request on changes...`);
 
-  await exec("git checkout -b aws-cdk-version-update", undefined, {
+  await exec("git checkout -b npm-audit-fix", undefined, {
     cwd: WORKING_DIR,
   });
   await exec("git status");
