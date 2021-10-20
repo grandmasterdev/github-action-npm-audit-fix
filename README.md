@@ -13,7 +13,7 @@ Create a step in your job that will use the action as follows:
 ```yaml
 -  uses: actions/checkout
 
--  uses: grandmasterdev/github-action-npm-audit-fix
+-  uses: grandmasterdev/github-action-npm-audit-fix@v0.0.2
         with:
           working-dir: ${{github.workspace}}
           github-user: 'action-committer'

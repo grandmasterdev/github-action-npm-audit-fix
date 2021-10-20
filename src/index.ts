@@ -31,6 +31,7 @@ const getPackageLock = async () => {
 const npmAuditFix = async () => {
   console.info("attempting to npm audit fix...");
 
+  await exec(`npm install`);
   await exec(`npm audit fix`);
 };
 
