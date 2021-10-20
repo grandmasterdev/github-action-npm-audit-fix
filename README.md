@@ -13,7 +13,7 @@ Create a step in your job that will use the action as follows:
 ```yaml
 -  uses: actions/checkout
 
--  uses: grandmasterdev/github-action-npm-audit-fix@v0.0.2
+-  uses: grandmasterdev/github-action-npm-audit-fix@latest
         with:
           working-dir: ${{github.workspace}}
           github-user: 'action-committer'
@@ -52,7 +52,7 @@ With the above, you can then access the value of the working directory via the e
         echo "wd=${WD}" >> $GITHUB_ENV
       id: working-dir
 
-- uses: grandmasterdev/github-action-npm-audit-fix
+- uses: grandmasterdev/github-action-npm-audit-fix@latest
       with:
         working-dir: ${{env.wd}}
 ```
@@ -60,7 +60,7 @@ With the above, you can then access the value of the working directory via the e
 or if you are using `context`
 
 ```yaml
-- uses: grandmasterdev/github-action-npm-audit-fix
+- uses: grandmasterdev/github-action-npm-audit-fix@latest
       with:
         working-dir: ${{github.workspace}}
 ```
