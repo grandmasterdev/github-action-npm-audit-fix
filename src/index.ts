@@ -137,7 +137,7 @@ const createIssue = async () => {
     await githubConfig();
 
     console.info(`creating issue on audit...`);
-    
+
     await octokit.rest.issues.create({
         owner: context.repo.owner,
         repo: context.repo.repo,
