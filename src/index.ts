@@ -36,6 +36,13 @@ const npmAuditFix = async () => {
 };
 
 /**
+ * Check if npm audit fix fixes all issue(s)
+ */
+const checkIfAuditFixesAll = async () => {
+
+}
+
+/**
  * See if npm audit fixed anything
  * @param previous 
  * @param current 
