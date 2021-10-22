@@ -1,0 +1,24 @@
+# Create tagging and release for master/main branch commit
+
+name: Create tag and release
+
+on:
+  push:
+    branches: [master, main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-dir: '.'
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Replaces git tag
+        run: "git tag -f -a latest"
+

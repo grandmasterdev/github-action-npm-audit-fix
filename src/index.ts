@@ -38,7 +38,22 @@ const npmAuditFix = async () => {
 /**
  * Check if npm audit fix fixes all issue(s)
  */
-const checkIfAuditFixesAll = async () => {};
+const checkIfAuditFixesAll = async (): Promise<boolean> => {
+    console.info('check if npm audit fixes all...');
+
+    await exec(`npm audit > npm-audit-output.txt`);
+
+    const npmAuditOutput = readFileSync(
+        resolve(WORKING_DIR, 'npm-audit-output.txt'),
+        { encoding: 'utf-8' }
+    );
+
+    if (npmAuditOutput.indexOf('found 0 vulnerabilities') > -1) {
+        return true;
+    }
+
+    return false;
+};
 
 /**
  * See if npm audit fixed anything
@@ -104,6 +119,34 @@ const makePullRequest = async () => {
 };
 
 /**
+ * Create issue if npm audit didn't fix all
+ */
+const createIssue = async () => {
+    const auditReport = readFileSync(
+        resolve(WORKING_DIR, 'npm-audit-output.txt'),
+        { encoding: 'utf-8' }
+    );
+
+    const octokit = getOctokit(GITHUB_TOKEN);
+
+    const { data } = await octokit.request('GET /repos/:owner/:repo', {
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+    });
+
+    await githubConfig();
+
+    await octokit.rest.issues.create({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        title: 'npm audit fix failed',
+        body:
+            'Attempt to auto fix npm vulnerabilities via `npm audit fix` was not 100% successfull. The following is the report \n\r' +
+            auditReport
+    });
+};
+
+/**
  * Executor
  */
 const run = async () => {
@@ -128,6 +171,12 @@ const run = async () => {
 
     if (hasChanged) {
         await makePullRequest();
+    }
+
+    const hasFixedAll = await checkIfAuditFixesAll();
+
+    if (!hasFixedAll) {
+      await createIssue();
     }
 };
 
