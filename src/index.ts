@@ -142,7 +142,7 @@ const createIssue = async () => {
         title: 'npm audit fix failed',
         body:
             'Attempt to auto fix npm vulnerabilities via `npm audit fix` was not 100% successfull. The following is the report \n\r' +
-            auditReport
+            auditReport,
     });
 };
 
@@ -176,7 +176,7 @@ const run = async () => {
     const hasFixedAll = await checkIfAuditFixesAll();
 
     if (!hasFixedAll) {
-      await createIssue();
+        await createIssue();
     }
 };
 
