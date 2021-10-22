@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack",
-    "prepare": "husky install",
-    "prepush": "git-branch-is master && echo /Create release tag/"
+    "prepare": "husky install"
   },
   "keywords": [
     "github",
