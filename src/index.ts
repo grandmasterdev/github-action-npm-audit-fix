@@ -1,5 +1,6 @@
 import { setOutput, getInput } from '@actions/core';
 import { exec } from '@actions/exec';
+import { execSync } from 'child_process';
 import { getOctokit, context } from '@actions/github';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
@@ -41,7 +42,7 @@ const npmAuditFix = async () => {
 const checkIfAuditFixesAll = async (): Promise<boolean> => {
     console.info('check if npm audit fixes all...');
 
-    await exec(`npm audit > npm-audit-output.txt`);
+    execSync(`npm audit > npm-audit-output.txt`, {encoding: 'utf-8'});
 
     const npmAuditOutput = readFileSync(
         resolve(WORKING_DIR, 'npm-audit-output.txt'),
