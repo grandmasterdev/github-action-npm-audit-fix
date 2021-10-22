@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack",
+    "test": "jest --collectCoverage",
     "prepare": "husky install"
   },
   "keywords": [
