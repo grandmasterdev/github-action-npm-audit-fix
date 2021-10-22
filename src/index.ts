@@ -42,18 +42,19 @@ const npmAuditFix = async () => {
 const checkIfAuditFixesAll = async (): Promise<boolean> => {
     console.info('check if npm audit fixes all...');
 
-    execSync(`npm audit > npm-audit-output.txt`, {encoding: 'utf-8'});
+    const auditReport = execSync(`npm audit --json`, { encoding: 'utf-8' });
 
-    const npmAuditOutput = readFileSync(
-        resolve(WORKING_DIR, 'npm-audit-output.txt'),
-        { encoding: 'utf-8' }
-    );
-
-    if (npmAuditOutput.indexOf('found 0 vulnerabilities') > -1) {
-        return true;
+    if (!auditReport) {
+        return false;
     }
 
-    return false;
+    const parsedAuditReport = JSON.parse(auditReport);
+
+    if (parsedAuditReport.vulnerabilities) {
+        return false;
+    }
+
+    return true;
 };
 
 /**
@@ -123,10 +124,7 @@ const makePullRequest = async () => {
  * Create issue if npm audit didn't fix all
  */
 const createIssue = async () => {
-    const auditReport = readFileSync(
-        resolve(WORKING_DIR, 'npm-audit-output.txt'),
-        { encoding: 'utf-8' }
-    );
+    const auditReport = execSync(`npm audit --json`, { encoding: 'utf-8' });
 
     const octokit = getOctokit(GITHUB_TOKEN);
 
