@@ -1,6 +1,5 @@
 import { setOutput, getInput } from '@actions/core';
-import { exec } from '@actions/exec';
-import { execSync } from 'child_process';
+import { exec, getExecOutput } from '@actions/exec';
 import { getOctokit, context } from '@actions/github';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
@@ -42,13 +41,13 @@ const npmAuditFix = async () => {
 const checkIfAuditFixesAll = async (): Promise<boolean> => {
     console.info('check if npm audit fixes all...');
 
-    const auditReport = execSync(`npm audit --json`, { encoding: 'utf-8' });
+    const auditReport = await getExecOutput(`npm audit --json`);
 
-    if (!auditReport) {
+    if (!auditReport || !auditReport.stdout) {
         return false;
     }
 
-    const parsedAuditReport = JSON.parse(auditReport);
+    const parsedAuditReport = JSON.parse(auditReport.stdout);
 
     if (parsedAuditReport.vulnerabilities) {
         return false;
@@ -124,7 +123,7 @@ const makePullRequest = async () => {
  * Create issue if npm audit didn't fix all
  */
 const createIssue = async () => {
-    const auditReport = execSync(`npm audit --json`, { encoding: 'utf-8' });
+    const auditReport = await getExecOutput(`npm audit --json`);
 
     const octokit = getOctokit(GITHUB_TOKEN);
 
@@ -143,7 +142,7 @@ const createIssue = async () => {
         title: 'npm audit fix failed',
         body:
             'Attempt to auto fix npm vulnerabilities via `npm audit fix` was not 100% successfull. The following is the report \n\r' +
-            auditReport,
+            auditReport.stdout,
     });
 };
 
