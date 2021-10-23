@@ -41,7 +41,9 @@ const npmAuditFix = async () => {
 const checkIfAuditFixesAll = async (): Promise<boolean> => {
     console.info('check if npm audit fixes all...');
 
-    const auditReport = await getExecOutput(`npm audit --json`);
+    const auditReport = await getExecOutput(`npm`, ['audit', '--json'], {
+        ignoreReturnCode: true,
+    });
 
     console.info('audit report', auditReport.stdout);
 
@@ -49,10 +51,14 @@ const checkIfAuditFixesAll = async (): Promise<boolean> => {
         return false;
     }
 
-    const parsedAuditReport = JSON.parse(auditReport.stdout);
+    try {
+        const parsedAuditReport = JSON.parse(auditReport.stdout);
 
-    if (parsedAuditReport.vulnerabilities) {
-        return false;
+        if (parsedAuditReport.vulnerabilities) {
+            return false;
+        }
+    } catch (ex) {
+        console.log((ex as Error).toString());
     }
 
     return true;
