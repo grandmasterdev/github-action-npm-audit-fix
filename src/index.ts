@@ -43,12 +43,12 @@ const checkIfAuditFixesAll = async (): Promise<boolean> => {
 
     const auditReport = await getExecOutput(`npm audit --json`);
 
+    console.info('audit report', auditReport.stdout);
+    
     if (!auditReport || !auditReport.stdout) {
         return false;
     }
 
-    console.info('audit report', auditReport.stdout);
-    
     const parsedAuditReport = JSON.parse(auditReport.stdout);
 
     if (parsedAuditReport.vulnerabilities) {
