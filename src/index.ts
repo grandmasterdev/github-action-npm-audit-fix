@@ -47,6 +47,8 @@ const checkIfAuditFixesAll = async (): Promise<boolean> => {
         return false;
     }
 
+    console.info('audit report', auditReport.stdout);
+    
     const parsedAuditReport = JSON.parse(auditReport.stdout);
 
     if (parsedAuditReport.vulnerabilities) {
