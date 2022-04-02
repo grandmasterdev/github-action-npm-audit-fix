@@ -25,7 +25,7 @@ outputs:
     description: 'informs if the update was done successfully or not'
 
 runs:
-  using: node12
+  using: node16
   main: dist/index.js
 
 branding:
